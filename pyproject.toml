@@ -18,7 +18,8 @@ httpx = "^0.27.0"
 dnspython = "^2.6.1"
 pydantic = {extras = ["email"], version = "^2.6.4"}
 uvicorn = "^0.28.0"
-
+types-mock = "^5.1.0.20240311"
+pytest-mock = "^3.12.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
@@ -30,6 +31,7 @@ pylint = "^3.1.0"
 autopep8 = "^2.0.4"
 bandit = "^1.7.8"
 mypy = "^1.9.0"
+flake8-pyproject = "^1.2.3"
 
 [build-system]
 requires = ["poetry-core"]
@@ -50,7 +52,7 @@ line_length = 100
 
 
 [tool.flake8]
-ignore = "E203, E266, E501, W503, F403, F401"
+ignore = "E203 E266 E501 W503 F403 F401"
 max-line-length = 100
 max-complexity = 18
 select = "B,C,E,F,W,T4,B9"
@@ -91,8 +93,6 @@ mypy_path = ["stubs"]
 [tool.pysen.lint.mypy_modules."numpy"]
   ignore_errors = true
 
-
-
 [tool.pylint]
 disable = "W,C,R,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode"
 output-format = "colorized"
@@ -102,12 +102,10 @@ max-line-length = 100
 verbose = true
 
 [tool.bandit]
-recursive = true
-configfile = "bandit.yaml"
-exclude = "B101"
-
-
+exclude_dirs = ["tests"]
+tests = ["B201", "B301"]
+skips = ["B101", "B601"]
 
 [tool.poetry.scripts]
-testall = "pysen run lint && flake8 . && pylint app && autopep8 --in-place --recursive --max-line-length 100 . && bandit -r . -s B101 && pytest"
-start = "oetry run uvicorn app.main:start"
+testall = "pysen run lint && flake8 . && pylint app && autopep8 --in-place --recursive . && bandit -c pyproject.toml -r . && pytest"
+start = "poetry run uvicorn app.main:start"

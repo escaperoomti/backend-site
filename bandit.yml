@@ -1,6 +1,0 @@
-# bandit.yaml
-skips: ['B101', 'B303']
-tests: ['B101', 'B102', 'B103', 'B301', 'B302', 'B303', 'B304', 'B305', 'B306', 'B307', 'B308', 'B309', 'B310']
-exclude_dirs:
-  - tests
-  - docs
