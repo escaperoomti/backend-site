@@ -1,4 +1,4 @@
-from app.routes.v1 import recruiter
+from app.src.routes.v1 import recruiter
 from fastapi import APIRouter
 
 router = APIRouter()
