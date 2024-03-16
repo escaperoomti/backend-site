@@ -2,7 +2,10 @@
 name = "escape-room"
 version = "0.0.1"
 description = "Exciting virtual escape room designed for programming enthusiasts and tech recruiters."
-authors = ["Enrique Lazo Bello <enlabe@gmail.com>"]
+authors = [
+  "Enrique Lazo Bello <enlabe@gmail.com>",
+  "Francisco Terrones <francisco.terronesr@gmail.com>"
+]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -12,6 +15,9 @@ sqlalchemy = "^2.0.28"
 alembic = "^1.13.1"
 psycopg2 = "^2.9.9"
 httpx = "^0.27.0"
+dnspython = "^2.6.1"
+pydantic = {extras = ["email"], version = "^2.6.4"}
+uvicorn = "^0.28.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -103,5 +109,5 @@ exclude = "B101"
 
 
 [tool.poetry.scripts]
-testall = "pysen run lint && flake8 . && pylint app && autopep8 --in-place --recursive . && bandit -r . -s B101 && pytest"
-
+testall = "pysen run lint && flake8 . && pylint app && autopep8 --in-place --recursive --max-line-length 100 . && bandit -r . -s B101 && pytest"
+start = "oetry run uvicorn app.main:start"
