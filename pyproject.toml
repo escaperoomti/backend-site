@@ -23,6 +23,7 @@ black = "^24.3.0"
 pylint = "^3.1.0"
 autopep8 = "^2.0.4"
 bandit = "^1.7.8"
+mypy = "^1.9.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -41,6 +42,7 @@ use_parentheses = true
 ensure_newline_before_comments = true
 line_length = 100
 
+
 [tool.flake8]
 ignore = "E203, E266, E501, W503, F403, F401"
 max-line-length = 100
@@ -50,11 +52,40 @@ verbose = true
 
 [tool.pytest.ini_options]
 minversion = "8.1.1"
-addopts = "--verbose"
+addopts = "--verbose -p no:warnings"
 
 [tool.pysen]
-lint = ["flake8", "pylint", "bandit"]
-format = ["isort", "black"]
+version = "0.10.6"
+
+[tool.pysen.lint]
+enable_black = true
+enable_flake8 = true
+enable_isort = true
+enable_mypy = true
+mypy_preset = "strict"
+line_length = 100
+py_version = "py311"
+isort_known_third_party = ["numpy"]
+isort_known_first_party = ["pysen"]
+mypy_ignore_packages = ["pysen.generated.*"]
+mypy_path = ["stubs"]
+
+[[tool.pysen.lint.mypy_targets]]
+  paths = ["."]
+
+[tool.pysen.lint.source]
+  includes = ["."]
+  include_globs = ["**/*.template"]
+  excludes = ["third_party/"]
+  exclude_globs = ["**/*_grpc.py"]
+
+[tool.pysen.lint.mypy_modules."pysen.scripts"]
+  preset = "entry"
+
+[tool.pysen.lint.mypy_modules."numpy"]
+  ignore_errors = true
+
+
 
 [tool.pylint]
 disable = "W,C,R,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode"
@@ -67,4 +98,10 @@ verbose = true
 [tool.bandit]
 recursive = true
 configfile = "bandit.yaml"
+exclude = "B101"
+
+
+
+[tool.poetry.scripts]
+testall = "black . && isort . && flake8 . && pysen run lint && pylint . && autopep8 --in-place --recursive . && bandit -r . && pytest"
 
