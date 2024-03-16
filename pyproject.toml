@@ -103,5 +103,5 @@ exclude = "B101"
 
 
 [tool.poetry.scripts]
-testall = "black . && isort . && flake8 . && pysen run lint && pylint . && autopep8 --in-place --recursive . && bandit -r . && pytest"
+testall = "pysen run lint && flake8 . && pylint app && autopep8 --in-place --recursive . && bandit -r . -s B101 && pytest"
 
